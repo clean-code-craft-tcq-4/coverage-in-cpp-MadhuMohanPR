@@ -27,7 +27,6 @@ typedef struct {
   char brand[48];
 } BatteryCharacter;
 
-
 typedef std::pair< double,double > temperatureLimit;
 typedef std::map< CoolingType,temperatureLimit > temperatureLimitMap;
 typedef std::map<BreachType,std::string> temperatureStatusList;
