@@ -17,12 +17,6 @@ TEST_CASE("get the temperature limits for each cooling type") {
   REQUIRE(tempRangeList[PASSIVE_COOLING].second == 35);
 }
 
-TEST_CASE("classify the given temperature based on given ranges") {
-  temperatureLimitMap tempRangeList=getTemperatureRangeList();
-  REQUIRE(classifyTemperatureBreach(PASSIVE_COOLING,-10,tempRangeList) == TOO_LOW);
-  REQUIRE(classifyTemperatureBreach(HI_ACTIVE_COOLING,70,tempRangeList) == TOO_HIGH);
-  REQUIRE(classifyTemperatureBreach(MED_ACTIVE_COOLING,20,tempRangeList) == NORMAL);
-}
 
 TEST_CASE("get temperature status message list") {
   temperatureStatusList tempStatusList=getTemperatureStatusMessageList();
@@ -31,11 +25,11 @@ TEST_CASE("get temperature status message list") {
   REQUIRE(tempStatusList.begin()->second == "Temperature is normal");
 }
 
-TEST_CASE("Retrieve the message sent from controller") {
-  temperatureStatusList tempStatusList=getTemperatureStatusMessageList();
-	std::string expectedMessage="feed : 2";
-  REQUIRE(sendToController(TOO_HIGH) ==expectedMessage);
-	printOnConsole(sendToController(TOO_HIGH));
+TEST_CASE("classify the given temperature based on given ranges") {
+  temperatureLimitMap tempRangeList=getTemperatureRangeList();
+  REQUIRE(classifyTemperatureBreach(PASSIVE_COOLING,-10,tempRangeList) == TOO_LOW);
+  REQUIRE(classifyTemperatureBreach(HI_ACTIVE_COOLING,70,tempRangeList) == TOO_HIGH);
+  REQUIRE(classifyTemperatureBreach(MED_ACTIVE_COOLING,20,tempRangeList) == NORMAL);
 }
 
 TEST_CASE("Retrieve the message sent from email") {
@@ -44,6 +38,13 @@ TEST_CASE("Retrieve the message sent from email") {
   std::string status="Temperature is too high";
 	std::string expectedMessage="To: " + recepient + "\n" + "Hi," + status;
   REQUIRE(sendToEmail(TOO_HIGH,tempStatusList) ==expectedMessage);
+}
+
+TEST_CASE("Retrieve the message sent from controller") {
+  temperatureStatusList tempStatusList=getTemperatureStatusMessageList();
+	std::string expectedMessage="feed : 2";
+  REQUIRE(sendToController(TOO_HIGH) ==expectedMessage);
+	printOnConsole(sendToController(TOO_HIGH));
 }
 
 TEST_CASE("Test temperature checker and alert functionality") {
