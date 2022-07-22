@@ -1,5 +1,10 @@
 #pragma once
 
+#pragma once
+#include <map>
+#include <utility>
+#include<string>
+
 typedef enum {
   PASSIVE_COOLING,
   HI_ACTIVE_COOLING,
@@ -12,9 +17,6 @@ typedef enum {
   TOO_HIGH
 } BreachType;
 
-BreachType inferBreach(double value, double lowerLimit, double upperLimit);
-BreachType classifyTemperatureBreach(CoolingType coolingType, double temperatureInC);
-
 typedef enum {
   TO_CONTROLLER,
   TO_EMAIL
@@ -25,8 +27,17 @@ typedef struct {
   char brand[48];
 } BatteryCharacter;
 
-void checkAndAlert(
-  AlertTarget alertTarget, BatteryCharacter batteryChar, double temperatureInC);
 
-void sendToController(BreachType breachType);
-void sendToEmail(BreachType breachType);
+typedef std::pair< double,double > temperatureLimit;
+typedef std::map< CoolingType,temperatureLimit > temperatureLimitMap;
+typedef std::map<BreachType,std::string> temperatureStatusList;
+
+temperatureLimitMap getTemperatureRangeList();
+temperatureStatusList getTemperatureStatusMessageList();
+
+void printOnConsole(std::string message);
+std::string sendToController(BreachType breachType);
+std::string sendToEmail(BreachType breachType,temperatureStatusList temperatureStatusMessageList);
+BreachType inferBreach(double value, double lowerLimit, double upperLimit);
+BreachType classifyTemperatureBreach(CoolingType coolingType, double temperatureInC,temperatureLimitMap temperatureRangeList);
+void checkAndAlert(AlertTarget alertTarget, BatteryCharacter batteryChar, double temperatureInC);
