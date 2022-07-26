@@ -2,6 +2,7 @@
 #include <map>
 #include <utility>
 #include<string>
+#include<stdlib.h>
 
 typedef enum {
   PASSIVE_COOLING,
