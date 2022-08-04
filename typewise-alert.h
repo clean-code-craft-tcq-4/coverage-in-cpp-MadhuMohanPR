@@ -26,16 +26,17 @@ typedef struct {
   char brand[48];
 } BatteryCharacter;
 
-typedef std::pair< double,double > temperatureLimit;
-typedef std::map< CoolingType,temperatureLimit > temperatureLimitMap;
-typedef std::map<BreachType,std::string> temperatureStatusList;
+typedef std::pair< double,double > temperatureCheck;
+typedef std::map< CoolingType,temperatureCheck > temperatureCheckMap;
+typedef std::map<BreachType,std::string> temperatureStatus;
 
-temperatureLimitMap getTemperatureRangeList();
-temperatureStatusList getTemperatureStatusMessageList();
+temperatureCheckMap getTemperatureRangeList();
+temperatureStatus getTemperatureStatusMessage();
 
 void printOnConsole(std::string message);
 std::string sendToController(BreachType breachType);
-std::string sendToEmail(BreachType breachType,temperatureStatusList temperatureStatusMessageList);
+std::string sendToEmail(BreachType breachType,temperatureStatus temperatureStatusMessageList);
 BreachType inferBreach(double value, double lowerLimit, double upperLimit);
-BreachType classifyTemperatureBreach(CoolingType coolingType, double temperatureInC,temperatureLimitMap temperatureRangeList);
+BreachType classifyTemperatureBreach(CoolingType coolingType, double temperatureInC,temperatureCheckMap temperatureRangeList);
 void checkAndAlert(AlertTarget alertTarget, BatteryCharacter batteryChar, double temperatureInC);
+
